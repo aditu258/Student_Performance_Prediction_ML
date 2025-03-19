@@ -26,9 +26,9 @@ from xgboost import XGBRegressor
 import mlflow
 from urllib.parse import urlparse
 
-import dagshub
 #import dagshub
-dagshub.init(repo_owner='aditu258', repo_name='Student_Performance_Prediction_ML', mlflow=True)
+#import dagshub
+#dagshub.init(repo_owner='aditu258', repo_name='Student_Performance_Prediction_ML', mlflow=True)
 
 class ModelTrainer:
     def __init__(self, model_trainer_config: ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact):
@@ -38,7 +38,7 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
         
-    def track_mlflow(self, best_model, r2_score):
+    '''def track_mlflow(self, best_model, r2_score):
         mlflow.set_registry_uri("file:///path/to/local/mlruns")  # Set MLflow to track locally
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
         with mlflow.start_run():
@@ -49,7 +49,7 @@ class ModelTrainer:
                 model_name = best_model.__class__.__name__
                 mlflow.sklearn.log_model(best_model, "model", registered_model_name=model_name)
             else:
-                mlflow.sklearn.log_model(best_model, "model")
+                mlflow.sklearn.log_model(best_model, "model")'''
 
     def train_model(self, X_train, y_train, X_test, y_test):
         models = {
@@ -101,7 +101,7 @@ class ModelTrainer:
         r2_test = r2_score(y_test, y_test_pred)
 
         # Track with MLflow
-        self.track_mlflow(best_model, r2_test)
+        s#elf.track_mlflow(best_model, r2_test)
 
         preprocessor = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
         model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
@@ -109,6 +109,7 @@ class ModelTrainer:
 
         Network_Model = NetworkModel(preprocessor=preprocessor, model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path, obj=Network_Model)
+        save_object("final_model/model.pkl",best_model)
 
         model_trainer_artifact = ModelTrainerArtifact(
             trained_model_file_path=self.model_trainer_config.trained_model_file_path,
