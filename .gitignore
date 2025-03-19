@@ -3,3 +3,4 @@ venv
 Artifacts/
 logs/
 mlruns/
+netvenv/
