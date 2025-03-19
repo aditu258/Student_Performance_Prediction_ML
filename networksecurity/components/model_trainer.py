@@ -26,11 +26,9 @@ from xgboost import XGBRegressor
 import mlflow
 from urllib.parse import urlparse
 
-# import dagshub  # Commented out DagsHub
-
-# os.environ["MLFLOW_TRACKING_URI"] = "https://dagshub.com/krishnaik06/networksecurity.mlflow"  # Commented out DagsHub URI
-# os.environ["MLFLOW_TRACKING_USERNAME"] = "krishnaik06"  # Commented out DagsHub username
-# os.environ["MLFLOW_TRACKING_PASSWORD"] = "7104284f1bb44ece21e0e2adb4e36a250ae3251f"  # Commented out DagsHub password
+import dagshub
+#import dagshub
+dagshub.init(repo_owner='aditu258', repo_name='Student_Performance_Prediction_ML', mlflow=True)
 
 class ModelTrainer:
     def __init__(self, model_trainer_config: ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact):
@@ -47,7 +45,9 @@ class ModelTrainer:
             mlflow.log_metric("r2_score", r2_score)
             mlflow.sklearn.log_model(best_model, "model")
             if tracking_url_type_store != "file":
-                mlflow.sklearn.log_model(best_model, "model", registered_model_name=best_model)
+                # Use the model's class name as the registered model name
+                model_name = best_model.__class__.__name__
+                mlflow.sklearn.log_model(best_model, "model", registered_model_name=model_name)
             else:
                 mlflow.sklearn.log_model(best_model, "model")
 
