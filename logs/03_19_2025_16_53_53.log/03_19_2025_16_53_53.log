@@ -1,0 +1,72 @@
+[ 2025-03-19 16:53:58,848 ] 20 root - INFO - Initiate the data ingestion
+[ 2025-03-19 16:54:00,519 ] 65 root - INFO - Performed train test split on the dataframe
+[ 2025-03-19 16:54:00,519 ] 67 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[ 2025-03-19 16:54:00,521 ] 75 root - INFO - Exporting train and test file path.
+[ 2025-03-19 16:54:00,526 ] 84 root - INFO - Exported train and test file path.
+[ 2025-03-19 16:54:00,526 ] 22 root - INFO - Data Initiation Completed
+[ 2025-03-19 16:54:00,529 ] 26 root - INFO - Initiate the data Validation
+[ 2025-03-19 16:54:00,557 ] 32 root - INFO - Required number of columns:2
+[ 2025-03-19 16:54:00,557 ] 33 root - INFO - Data frame has columns:8
+[ 2025-03-19 16:54:00,557 ] 32 root - INFO - Required number of columns:2
+[ 2025-03-19 16:54:00,557 ] 33 root - INFO - Data frame has columns:8
+[ 2025-03-19 16:54:00,578 ] 28 root - INFO - data Validation Completed
+[ 2025-03-19 16:54:00,579 ] 31 root - INFO - data Transformation started
+[ 2025-03-19 16:54:00,579 ] 67 root - INFO - \U0001f680 Starting Data Transformation...
+[ 2025-03-19 16:54:00,579 ] 33 root - INFO - \U0001f4e5 Reading CSV file from: Artifacts\03_19_2025_16_53_53\data_ingestion\ingested\train.csv
+[ 2025-03-19 16:54:00,582 ] 33 root - INFO - \U0001f4e5 Reading CSV file from: Artifacts\03_19_2025_16_53_53\data_ingestion\ingested\test.csv
+[ 2025-03-19 16:54:00,584 ] 84 root - INFO - \U0001f4dd Train DataFrame Columns: ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course', 'math_score', 'reading_score', 'writing_score']
+[ 2025-03-19 16:54:00,584 ] 85 root - INFO - \U0001f4dd Test DataFrame Columns: ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course', 'math_score', 'reading_score', 'writing_score']
+[ 2025-03-19 16:54:00,595 ] 86 root - INFO - \U0001f4dd Train DataFrame Head:
+   gender race_ethnicity parental_level_of_education         lunch test_preparation_course  math_score  reading_score  writing_score
+0  female        group C           bachelor's degree  free/reduced                    none          43             62             61
+1  female        group C           bachelor's degree  free/reduced               completed          66             74             81
+2    male        group B            some high school      standard               completed          84             83             75
+3    male        group D                 high school  free/reduced                    none          75             74             66
+4    male        group C          associate's degree      standard                    none          74             73             67
+[ 2025-03-19 16:54:00,597 ] 87 root - INFO - \U0001f4dd Test DataFrame Head:
+   gender race_ethnicity parental_level_of_education         lunch test_preparation_course  math_score  reading_score  writing_score
+0    male        group E             master's degree      standard                    none          90             85             84
+1    male        group A            some high school      standard                    none          64             50             43
+2    male        group C             master's degree      standard                    none          67             57             59
+3    male        group E                 high school  free/reduced               completed          57             56             54
+4  female        group C                 high school  free/reduced                    none          53             72             64
+[ 2025-03-19 16:54:00,599 ] 109 root - INFO - \U0001f6e0\ufe0f Input Feature Train DataFrame Columns: ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course', 'reading_score', 'writing_score']
+[ 2025-03-19 16:54:00,609 ] 110 root - INFO - \U0001f6e0\ufe0f Input Feature Train DataFrame Head:
+   gender race_ethnicity parental_level_of_education         lunch test_preparation_course  reading_score  writing_score
+0  female        group C           bachelor's degree  free/reduced                    none             62             61
+1  female        group C           bachelor's degree  free/reduced               completed             74             81
+2    male        group B            some high school      standard               completed             83             75
+3    male        group D                 high school  free/reduced                    none             74             66
+4    male        group C          associate's degree      standard                    none             73             67
+[ 2025-03-19 16:54:00,609 ] 111 root - INFO - \U0001f6e0\ufe0f Input Feature Test DataFrame Columns: ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course', 'reading_score', 'writing_score']
+[ 2025-03-19 16:54:00,618 ] 112 root - INFO - \U0001f6e0\ufe0f Input Feature Test DataFrame Head:
+   gender race_ethnicity parental_level_of_education         lunch test_preparation_course  reading_score  writing_score
+0    male        group E             master's degree      standard                    none             85             84
+1    male        group A            some high school      standard                    none             50             43
+2    male        group C             master's degree      standard                    none             57             59
+3    male        group E                 high school  free/reduced               completed             56             54
+4  female        group C                 high school  free/reduced                    none             72             64
+[ 2025-03-19 16:54:00,630 ] 118 root - INFO - \U0001f6e0\ufe0f Preprocessor Object: ColumnTransformer(transformers=[('num_pipeline',
+                                 Pipeline(steps=[('imputer', SimpleImputer()),
+                                                 ('scaler', StandardScaler())]),
+                                 ['reading_score', 'writing_score']),
+                                ('cat_pipeline',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='most_frequent')),
+                                                 ('one_hot_encoder',
+                                                  OneHotEncoder(handle_unknown='ignore')),
+                                                 ('scaler',
+                                                  StandardScaler(with_mean=False))]),
+                                 ['gender', 'race_ethnicity',
+                                  'parental_level_of_education', 'lunch',
+                                  'test_preparation_course'])])
+[ 2025-03-19 16:54:00,630 ] 119 root - INFO - \U0001f6e0\ufe0f Numerical Columns: ['reading_score', 'writing_score']
+[ 2025-03-19 16:54:00,630 ] 120 root - INFO - \U0001f6e0\ufe0f Categorical Columns: ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course']
+[ 2025-03-19 16:54:00,652 ] 127 root - INFO - \U0001f6e0\ufe0f Transformed Train Data Shape: (800, 19)
+[ 2025-03-19 16:54:00,653 ] 128 root - INFO - \U0001f6e0\ufe0f Transformed Test Data Shape: (200, 19)
+[ 2025-03-19 16:54:00,658 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-03-19 16:54:00,659 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2025-03-19 16:54:00,659 ] 139 root - INFO - \u2705 Data Transformation completed successfully!
+[ 2025-03-19 16:54:00,659 ] 35 root - INFO - data Transformation completed
+[ 2025-03-19 16:54:00,659 ] 37 root - INFO - Model Training sstared
+[ 2025-03-19 16:54:48,130 ] 95 root - INFO - Best found model on both training and testing dataset

@@ -1,0 +1,24 @@
+gender:
+  drift_status: false
+  p_value: 0.9999999999864754
+lunch:
+  drift_status: false
+  p_value: 0.9999430874031353
+math_score:
+  drift_status: false
+  p_value: 0.21900641648731334
+parental_level_of_education:
+  drift_status: false
+  p_value: 0.7832521474862038
+race_ethnicity:
+  drift_status: false
+  p_value: 0.9117201049285875
+reading_score:
+  drift_status: false
+  p_value: 0.14438339908966644
+test_preparation_course:
+  drift_status: false
+  p_value: 1.0
+writing_score:
+  drift_status: false
+  p_value: 0.6528677473823293
