@@ -1,88 +1,62 @@
-import sys
-import os
-
-import certifi
-ca = certifi.where()
-
-from dotenv import load_dotenv
-load_dotenv()
-mongo_db_url = os.getenv("MONGODB_URL_KEY")
-print(mongo_db_url)
-import pymongo
-from networksecurity.exception.exception import NetworkSecurityException
-from networksecurity.logging.logger import logging
-from networksecurity.pipeline.training_pipeline import TrainingPipeline
-
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, File, UploadFile,Request
-from uvicorn import run as app_run
-from fastapi.responses import Response
-from starlette.responses import RedirectResponse
 import pandas as pd
+import numpy as np
+from flask import Flask, request, jsonify, render_template
+import joblib  # Import joblib for loading the model and preprocessor
+import logging
 
-from networksecurity.utils.main_utils.utils import load_object
+app = Flask(__name__)
 
-from networksecurity.utils.ml_utils.model.estimator import NetworkModel
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
+# Load trained model and preprocessor
+model = joblib.load(r"C:\Users\Lenovo\OneDrive\Desktop\final_networksecurity\final_model\model.pkl")  # Ensure this file exists
+preprocessor = joblib.load(r"C:\Users\Lenovo\OneDrive\Desktop\final_networksecurity\final_model\preprocessor.pkl")  # Ensure this file exists
 
-client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+@app.route("/")
+def home():
+    return render_template("index.html")  # A simple HTML form for input (optional)
 
-from networksecurity.constant.training_pipeline import DATA_INGESTION_COLLECTION_NAME
-from networksecurity.constant.training_pipeline import DATA_INGESTION_DATABASE_NAME
-
-database = client[DATA_INGESTION_DATABASE_NAME]
-collection = database[DATA_INGESTION_COLLECTION_NAME]
-
-app = FastAPI()
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-from fastapi.templating import Jinja2Templates
-templates = Jinja2Templates(directory="./templates")
-
-@app.get("/", tags=["authentication"])
-async def index():
-    return RedirectResponse(url="/docs")
-
-@app.get("/train")
-async def train_route():
+@app.route("/predict", methods=["POST"])
+def predict():
     try:
-        train_pipeline=TrainingPipeline()
-        train_pipeline.run_pipeline()
-        return Response("Training is successful")
-    except Exception as e:
-        raise NetworkSecurityException(e,sys)
-    
-@app.post("/predict")
-async def predict_route(request: Request,file: UploadFile = File(...)):
-    try:
-        df=pd.read_csv(file.file)
-        #print(df)
-        preprocesor=load_object("final_model/preprocessor.pkl")
-        final_model=load_object("final_model/model.pkl")
-        network_model = NetworkModel(preprocessor=preprocesor,model=final_model)
-        print(df.iloc[0])
-        y_pred = network_model.predict(df)
-        print(y_pred)
-        df['predicted_column'] = y_pred
-        print(df['predicted_column'])
-        #df['predicted_column'].replace(-1, 0)
-        #return df.to_json()
-        df.to_csv('prediction_output/output.csv')
-        table_html = df.to_html(classes='table table-striped')
-        #print(table_html)
-        return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
-        
-    except Exception as e:
-            raise NetworkSecurityException(e,sys)
+        # Get input data (supports both Form and JSON)
+        if request.is_json:
+            input_data = request.get_json()  # If JSON request
+        else:
+            input_data = {
+                "gender": request.form.get("gender"),
+                "race_ethnicity": request.form.get("race_ethnicity"),
+                "parental_level_of_education": request.form.get("parental_level_of_education"),
+                "lunch": request.form.get("lunch"),
+                "test_preparation_course": request.form.get("test_preparation_course"),
+                "writing_score": float(request.form.get("writing_score")),
+                "reading_score": float(request.form.get("reading_score"))
+            }
 
-    
-if __name__=="__main__":
-    app_run(app,host="0.0.0.0",port=8000)
+        # Log input data for debugging
+        logging.debug(f"Input Data: {input_data}")
+
+        # Convert to DataFrame
+        df = pd.DataFrame([input_data])
+
+        # Log DataFrame columns for debugging
+        logging.debug(f"DataFrame Columns: {df.columns.tolist()}")
+
+        # Apply the same transformations as training
+        df_transformed = preprocessor.transform(df)
+
+        # Convert to NumPy array and reshape for single prediction
+        input_array = np.array(df_transformed).reshape(1, -1)
+
+        # Make prediction
+        prediction = model.predict(input_array)[0]
+
+        return jsonify({"maths_score": round(prediction, 2)})
+
+    except Exception as e:
+        logging.error(f"Error during prediction: {str(e)}")
+        return jsonify({"error": str(e)})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)  # Runs on port 8000, accessible from any device

@@ -16,4 +16,5 @@ matplotlib
 xgboost
 dill
 flask
+joblib
 ##-e .
