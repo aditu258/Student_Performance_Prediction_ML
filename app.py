@@ -10,8 +10,8 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Load trained model and preprocessor
-model = joblib.load(r"C:\Users\Lenovo\OneDrive\Desktop\final_networksecurity\final_model\model.pkl")  # Ensure this file exists
-preprocessor = joblib.load(r"C:\Users\Lenovo\OneDrive\Desktop\final_networksecurity\final_model\preprocessor.pkl")  # Ensure this file exists
+model = joblib.load("final_model\model.pkl")  # Ensure this file exists
+preprocessor = joblib.load("final_model\preprocessor.pkl")  # Ensure this file exists
 
 @app.route("/")
 def home():
