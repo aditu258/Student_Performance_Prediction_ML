@@ -1,17 +1,18 @@
+import os
 import pandas as pd
 import numpy as np
 from flask import Flask, request, jsonify, render_template
-import joblib  # Import joblib for loading the model and preprocessor
-import logging
+import joblib
 
 app = Flask(__name__)
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
+# Use relative paths for model and preprocessor
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "final_model", "model.pkl")
+PREPROCESSOR_PATH = os.path.join(os.path.dirname(__file__), "final_model", "preprocessor.pkl")
 
 # Load trained model and preprocessor
-model = joblib.load("final_model\model.pkl")  # Ensure this file exists
-preprocessor = joblib.load("final_model\preprocessor.pkl")  # Ensure this file exists
+model = joblib.load(MODEL_PATH)  # Ensure this file exists
+preprocessor = joblib.load(PREPROCESSOR_PATH)  # Ensure this file exists
 
 @app.route("/")
 def home():
@@ -34,14 +35,8 @@ def predict():
                 "reading_score": float(request.form.get("reading_score"))
             }
 
-        # Log input data for debugging
-        logging.debug(f"Input Data: {input_data}")
-
         # Convert to DataFrame
         df = pd.DataFrame([input_data])
-
-        # Log DataFrame columns for debugging
-        logging.debug(f"DataFrame Columns: {df.columns.tolist()}")
 
         # Apply the same transformations as training
         df_transformed = preprocessor.transform(df)
@@ -55,7 +50,6 @@ def predict():
         return jsonify({"maths_score": round(prediction, 2)})
 
     except Exception as e:
-        logging.error(f"Error during prediction: {str(e)}")
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
