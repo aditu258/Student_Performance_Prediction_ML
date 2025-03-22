@@ -89,8 +89,8 @@ docker run -p 5000:5000 student-performance-prediction
 ## 📸 Screenshots  
 
 ### 🔹 MLflow Experiment Tracking  
-![MLflow Dashboard](screenshot/Screenshot 2025-03-22 085715.png)  
-![MLflow Dashboard](screenshot/Screenshot 2025-03-22 085730.png)  
+![MLflow Dashboard](https://github.com/aditu258/Student_Performance_Prediction_ML/blob/main/screenshot/Screenshot%202025-03-22%20085715.png)  
+![MLflow Dashboard](https://github.com/aditu258/Student_Performance_Prediction_ML/blob/main/screenshot/Screenshot%202025-03-22%20085730.png)  
 
 ### 🔹 Student Prediction UI  
 ![Prediction UI](https://github.com/aditu258/Student_Performance_Prediction_ML/blob/main/screenshot/Screenshot%202025-03-22%20091457.png)  
