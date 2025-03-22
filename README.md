@@ -93,7 +93,7 @@ docker run -p 5000:5000 student-performance-prediction
 ![MLflow Dashboard](screenshot/Screenshot 2025-03-22 085730.png)  
 
 ### 🔹 Student Prediction UI  
-![Prediction UI](screenshot/Screenshot 2025-03-22 091457.png)  
+![Prediction UI](https://github.com/aditu258/Student_Performance_Prediction_ML/blob/main/screenshot/Screenshot%202025-03-22%20091457.png)  
 
 ---
 
