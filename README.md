@@ -86,14 +86,14 @@ docker run -p 5000:5000 student-performance-prediction
 
 ---
 
-## 🖼️ Screenshots  
+## 📸 Screenshots  
 
-### 4️⃣ **MLflow Experiment Tracking**  
-![MLflow Dashboard](screenshot\Screenshot 2025-03-22 085715.png)  
-![MLflow Dashboard](screenshot\Screenshot 2025-03-22 085730.png)  
+### 🔹 MLflow Experiment Tracking  
+![MLflow Dashboard](screenshot/Screenshot-2025-03-22-085715.png)  
+![MLflow Dashboard](screenshot/Screenshot-2025-03-22-085730.png)  
 
-### 4️⃣ **Student Prediction UI**
- ![Prediction UI](screenshot\Screenshot 2025-03-22 091457.png)  
+### 🔹 Student Prediction UI  
+![Prediction UI](screenshot/Screenshot-2025-03-22-091457.png)  
 
 ---
 
