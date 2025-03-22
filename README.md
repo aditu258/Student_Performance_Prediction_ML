@@ -105,6 +105,6 @@ docker run -p 5000:5000 student-performance-prediction
 - **Deployment:** Flask, Docker, AWS S3  
 
 ---
-📧 **Contact:** adityasinha@iiitranchi.ac.in  
+📧 **Contact:** adityasinhagzb3107@gmail.com
 🚀 **Happy Coding!**
 
