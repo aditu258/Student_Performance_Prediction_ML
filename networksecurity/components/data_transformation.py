@@ -33,7 +33,7 @@ class DataTransformation:
             logging.info(f"📥 Reading CSV file from: {file_path}")
             return pd.read_csv(file_path)
         except Exception as e:
-            raise NetworkSecurityException(f"❌ Error reading CSV: {str(e)}", sys)
+            raise NetworkSecurityException(f"Error reading CSV: {str(e)}", sys)
         
     def get_data_transformer_object(self) -> ColumnTransformer:
         """Creates a ColumnTransformer with pipelines for numerical and categorical features"""
@@ -59,19 +59,19 @@ class DataTransformation:
             ])
             return preprocessor
         except Exception as e:
-            raise NetworkSecurityException(f"❌ Error in data transformer object: {str(e)}", sys)
+            raise NetworkSecurityException(f"Error in data transformer object: {str(e)}", sys)
     
     def initiate_data_transformation(self) -> DataTransformationArtifact:
         """Applies data transformation to training and testing datasets"""
         try:
-            logging.info("🚀 Starting Data Transformation...")
+            logging.info("Starting Data Transformation...")
 
             # Load train and test data
             train_file_path = self.data_validation_artifact.valid_train_file_path
             test_file_path = self.data_validation_artifact.valid_test_file_path
 
             if not os.path.exists(train_file_path) or not os.path.exists(test_file_path):
-                raise NetworkSecurityException("❌ Train/Test file not found!", sys)
+                raise NetworkSecurityException("Train/Test file not found!", sys)
 
             train_df = self.read_data(train_file_path)
             test_df = self.read_data(test_file_path)
@@ -80,13 +80,13 @@ class DataTransformation:
             train_df.columns = train_df.columns.str.strip()
             test_df.columns = test_df.columns.str.strip()
 
-            # ✅ Debugging: Print dataset info
-            logging.info(f"📝 Train DataFrame Columns: {train_df.columns.tolist()}")
-            logging.info(f"📝 Test DataFrame Columns: {test_df.columns.tolist()}")
-            logging.info(f"📝 Train DataFrame Head:\n{train_df.head()}")
-            logging.info(f"📝 Test DataFrame Head:\n{test_df.head()}")
+            # Debugging: Print dataset info
+            logging.info(f"Train DataFrame Columns: {train_df.columns.tolist()}")
+            logging.info(f"Test DataFrame Columns: {test_df.columns.tolist()}")
+            logging.info(f"Train DataFrame Head:\n{train_df.head()}")
+            logging.info(f"Test DataFrame Head:\n{test_df.head()}")
 
-            # 🛑 Check if required columns exist
+            # Check if required columns exist
             required_columns = ["math_score", "reading_score", "writing_score", "gender", "race_ethnicity", 
                                 "parental_level_of_education", "lunch", "test_preparation_course", TARGET_COLUMN]
             missing_cols_train = [col for col in required_columns if col not in train_df.columns]
@@ -94,7 +94,7 @@ class DataTransformation:
 
             if missing_cols_train or missing_cols_test:
                 raise NetworkSecurityException(
-                    f"❌ Missing columns in Train DataFrame: {missing_cols_train}, Test DataFrame: {missing_cols_test}", 
+                    f"Missing columns in Train DataFrame: {missing_cols_train}, Test DataFrame: {missing_cols_test}", 
                     sys
                 )
 
@@ -105,27 +105,27 @@ class DataTransformation:
             input_feature_test_df = test_df.drop(columns=[TARGET_COLUMN], axis=1)
             target_feature_test_df = test_df[TARGET_COLUMN]
 
-            # ✅ Debugging: Print input feature DataFrame info
-            logging.info(f"🛠️ Input Feature Train DataFrame Columns: {input_feature_train_df.columns.tolist()}")
-            logging.info(f"🛠️ Input Feature Train DataFrame Head:\n{input_feature_train_df.head()}")
-            logging.info(f"🛠️ Input Feature Test DataFrame Columns: {input_feature_test_df.columns.tolist()}")
-            logging.info(f"🛠️ Input Feature Test DataFrame Head:\n{input_feature_test_df.head()}")
+            # Debugging: Print input feature DataFrame info
+            logging.info(f"Input Feature Train DataFrame Columns: {input_feature_train_df.columns.tolist()}")
+            logging.info(f"Input Feature Train DataFrame Head:\n{input_feature_train_df.head()}")
+            logging.info(f"Input Feature Test DataFrame Columns: {input_feature_test_df.columns.tolist()}")
+            logging.info(f"Input Feature Test DataFrame Head:\n{input_feature_test_df.head()}")
 
             # Get preprocessor object
             preprocessor = self.get_data_transformer_object()
             
-            # ✅ Debugging: Print preprocessor details
-            logging.info(f"🛠️ Preprocessor Object: {preprocessor}")
-            logging.info(f"🛠️ Numerical Columns: {preprocessor.transformers[0][2]}")
-            logging.info(f"🛠️ Categorical Columns: {preprocessor.transformers[1][2]}")
+            # Debugging: Print preprocessor details
+            logging.info(f"Preprocessor Object: {preprocessor}")
+            logging.info(f"Numerical Columns: {preprocessor.transformers[0][2]}")
+            logging.info(f"Categorical Columns: {preprocessor.transformers[1][2]}")
 
             # Apply transformation
             input_feature_train_arr = preprocessor.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessor.transform(input_feature_test_df)
 
-            # ✅ Debugging: Print transformed data shape
-            logging.info(f"🛠️ Transformed Train Data Shape: {input_feature_train_arr.shape}")
-            logging.info(f"🛠️ Transformed Test Data Shape: {input_feature_test_arr.shape}")
+            # Debugging: Print transformed data shape
+            logging.info(f"Transformed Train Data Shape: {input_feature_train_arr.shape}")
+            logging.info(f"Transformed Test Data Shape: {input_feature_test_arr.shape}")
 
             # Combine transformed features with target values
             train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
@@ -136,7 +136,7 @@ class DataTransformation:
             save_numpy_array_data(self.data_transformation_config.transformed_test_file_path, test_arr)
             save_object(self.data_transformation_config.transformed_object_file_path, preprocessor)
             save_object("final_model/preprocessor.pkl",preprocessor)
-            logging.info("✅ Data Transformation completed successfully!")
+            logging.info("Data Transformation completed successfully!")
 
             return DataTransformationArtifact(
                 transformed_object_file_path=self.data_transformation_config.transformed_object_file_path,
@@ -145,4 +145,4 @@ class DataTransformation:
             )
 
         except Exception as e:
-            raise NetworkSecurityException(f"❌ Data Transformation Failed: {str(e)}", sys)
+            raise NetworkSecurityException(f"Data Transformation Failed: {str(e)}", sys)
